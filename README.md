@@ -6,13 +6,17 @@ Online shop for البابر Herbal Oil: desi herbal hair oil with free delivery
 - **Backend:** Supabase (products, orders, customer accounts, contact messages).
 - **Hosting:** Cloudflare Pages, published automatically from this repository's `main` branch.
 
+## Folder
+- `website/`: everything that is published (pages, `css/`, `js/`, `Images/`).
+- `wrangler.jsonc`: Cloudflare settings (publishes the `website` folder).
+
 ## Where to change things
 | What | File |
 |---|---|
-| Prices, products, photos, hero image, WhatsApp number, social links, all English/Urdu text | `js/data.js` |
-| Supabase connection (publishable key only, safe to be public) | `js/supabase-config.js` |
-| Colours, fonts, layout | `css/style.css` (rules in `design-system/MASTER.md`) |
-| Your own photos | put them in `Images/` and point to them in `js/data.js` |
+| Prices, products, photos, hero image, WhatsApp number, social links, all English/Urdu text | `website/js/data.js` |
+| Supabase connection (publishable key only, safe to be public) | `website/js/supabase-config.js` |
+| Colours, fonts, layout | `website/css/style.css` (rules in `website/design-system/MASTER.md`) |
+| Your own photos | put them in `website/Images/` and point to them in `website/js/data.js` |
 
 Shop owner admin panel: `/admin.html` (only accounts listed in the database `admins` table can use it).
 

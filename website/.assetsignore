@@ -1,0 +1,4 @@
+# Files in this folder that must not be published on the website
+.assetsignore
+design-system
+Images/.gitkeep

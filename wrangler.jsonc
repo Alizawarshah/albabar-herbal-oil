@@ -3,7 +3,7 @@
   "name": "albabar-herbal-oil",
   "compatibility_date": "2026-11-25",
   "assets": {
-    "directory": "./",
+    "directory": "./website",
     // unknown addresses show our designed 404.html page
     "not_found_handling": "404-page",
     // /shop.html is served at /shop (Cloudflare's default)
