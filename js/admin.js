@@ -40,7 +40,8 @@
 
   async function loadOrders() {
     $("#ordersInfo").textContent = "Loading…";
-    let q = sb.from("orders").select("*, order_items(name, qty, unit_price, line_total)").order("created_at", { ascending: false }).limit(200);
+    // explicit columns: the orders table hides its claim_token column from the API
+    let q = sb.from("orders").select("id, order_no, status, customer_name, phone, email, city, address, landmark, notes, payment_method, discount_code, subtotal, discount, total, lang, created_at, order_items(name, qty, unit_price, line_total)").order("created_at", { ascending: false }).limit(200);
     if (filter !== "all") q = q.eq("status", filter);
     const { data, error } = await q;
     if (error) { $("#ordersInfo").textContent = "Couldn't load orders: " + error.message; return; }

@@ -549,19 +549,27 @@
     $$(".nav__login span").forEach((s) => (s.textContent = lbl));
   }
   let authReady = false;
-  // Where the emailed sign-in link brings the customer back to (must be allowed in Supabase → Auth → URL Configuration)
+  // Where a password-reset email brings the customer back to (must be allowed in Supabase → Auth → URL Configuration)
   const authRedirect = () => location.origin + (location.hostname === "localhost" ? "/account.html" : "/account");
   // A used or expired emailed link comes back with an error in the address (#error_code=otp_expired …)
-  let linkError = "";
+  let linkError = "", recovering = false;
   {
     const h = new URLSearchParams(location.hash.slice(1));
     if (h.get("error_code") || h.get("error")) {
       linkError = h.get("error_code") === "otp_expired" ? "ac.err.linkUsed" : "ac.err.link";
       history.replaceState(null, "", location.pathname + location.search);
     }
+    if (h.get("type") === "recovery") recovering = true;
+  }
+  // A guest order placed in this browser can be attached to the account with its secret key
+  async function claimLastOrder() {
+    const o = store.get("lastOrder", null);
+    if (!o?.claimToken) return;
+    const { data } = await sb.rpc("claim_order", { p_order_no: o.no, p_token: o.claimToken });
+    if (data !== null) { delete o.claimToken; store.set("lastOrder", o); }
   }
   async function afterSignIn() {
-    await sb.rpc("claim_my_orders"); // earlier orders placed with this (now proven) email show in the account
+    await claimLastOrder();
     const next = sessionStorage.getItem("albabar.next");
     sessionStorage.removeItem("albabar.next");
     sessionStorage.removeItem("albabar.signinEmail");
@@ -576,6 +584,8 @@
     updateAuthUI();
     if (["account", "checkout", "thanks"].includes(PAGE)) PAGES[PAGE].render();
     sb.auth.onAuthStateChange((event, session) => {
+      // opened from a password-reset email: show "choose a new password"
+      if (event === "PASSWORD_RECOVERY") { recovering = true; user = session?.user || null; setTimeout(() => PAGES.account?.render(), 0); return; }
       const changed = (session?.user?.id || null) !== (user?.id || null);
       user = session?.user || null;
       // never call Supabase directly inside this callback; defer instead
@@ -592,24 +602,39 @@
     location.href = "account.html";
   };
 
-  let otpEmail = "", resendTimer;
-  function startResendCountdown() {
-    let s = 60; const b = $('[data-act="otp-resend"]');
-    clearInterval(resendTimer); b.disabled = true;
-    const tick = () => { b.textContent = s > 0 ? t("ac.resendIn", { s }) : t("ac.resend"); if (s-- <= 0) { clearInterval(resendTimer); b.disabled = false; } };
-    tick(); resendTimer = setInterval(tick, 1000);
-  }
+  const showAuthTab = (tab) => {
+    $$("#acctAuth [data-tab]").forEach((b) => b.classList.toggle("is-active", b.dataset.tab === tab));
+    $$("#acctAuth [data-panel]").forEach((p) => (p.hidden = p.dataset.panel !== tab));
+  };
+  // turn Supabase's English error messages into clear, translated ones
+  const authError = (error) => {
+    const m = (error?.message || "").toLowerCase();
+    if (/invalid login credentials/.test(m)) return t("ac.err.wrong");
+    if (/email not confirmed/.test(m)) return t("ac.err.notConfirmed");
+    if (/already registered|already been registered|user already exists/.test(m)) return t("ac.err.exists");
+    if (/password/.test(m) && /(short|least|weak|characters)/.test(m)) return t("ac.err.passShort");
+    if (/rate|seconds|security purposes|too many/.test(m)) return t("ac.err.wait");
+    return t("err.network");
+  };
+  const showErr = (id, msg) => { const el = $(id); el.hidden = !msg; el.textContent = msg || ""; };
 
   PAGES.account = {
     render() {
       if (!$("#acctAuth")) return;
       // wait for the saved session check, so signed-in customers don't see the sign-in form flash
-      if (sb && !authReady) { $("#acctAuth").hidden = true; $("#acctDash").hidden = true; return; }
+      if (sb && !authReady && !recovering) { $("#acctAuth").hidden = true; $("#acctDash").hidden = true; $("#acctReset").hidden = true; return; }
+      $("#acctReset").hidden = !recovering;
+      if (recovering) { $("#acctAuth").hidden = true; $("#acctDash").hidden = true; return; }
       $("#acctAuth").hidden = !!user; $("#acctDash").hidden = !user;
       if (!user) {
-        if (linkError) { $("#otpError").hidden = false; $("#otpError").textContent = t(linkError); linkError = ""; }
+        if (linkError) { showErr("#siError", t(linkError)); linkError = ""; }
         const pre = sessionStorage.getItem("albabar.signinEmail");
-        if (pre && !$("#otpEmail").value) $("#otpEmail").value = pre;
+        if (pre) {
+          if (!$("#siEmail").value) $("#siEmail").value = pre;
+          if (!$("#suEmail").value) $("#suEmail").value = pre;
+        }
+        // coming from a guest order: most likely they don't have an account yet
+        if (sessionStorage.getItem("albabar.preferSignup") && !this.tabChosen) { this.tabChosen = true; sessionStorage.removeItem("albabar.preferSignup"); showAuthTab("signup"); }
         return;
       }
       $("#acctEmail").textContent = user.email;
@@ -678,7 +703,8 @@
     city: (v) => !!v,
     address: (v) => v.trim().length >= 8,
     message: (v) => v.trim().length >= 3,
-    password: (v) => v.length >= 6,
+    password: (v) => v.length >= 8,
+    passwordAny: (v) => v.length >= 1,
     order: (v) => /^ALB-?\d{4,6}$/i.test(v.trim()),
   };
   // fields carry data-rule="phone" and data-err-key="err.phone"
@@ -718,8 +744,9 @@
     if (el.classList.contains("acc__btn")) { const o = el.parentElement.classList.toggle("is-open"); return el.setAttribute("aria-expanded", o); }
     if (el.hasAttribute("data-video")) return toast(t("vid.soon"));
     if (el.dataset.tab) {
-      $$("[data-tab]").forEach((b) => b.classList.toggle("is-active", b === el));
-      $$("[data-panel]").forEach((p) => (p.hidden = p.dataset.panel !== el.dataset.tab));
+      const scope = el.closest("section") || document;
+      $("[data-tab]", scope).forEach((b) => b.classList.toggle("is-active", b === el));
+      $("[data-panel]", scope).forEach((p) => (p.hidden = p.dataset.panel !== el.dataset.tab));
       return;
     }
 
@@ -757,9 +784,11 @@
         return;
       }
       case "signin-checkout": return goSignIn("", "checkout.html");
-      case "signin-thanks": return goSignIn(store.get("lastOrder", {}).email || "", "account.html");
-      case "otp-back": clearInterval(resendTimer); $("#otpCodeForm").hidden = true; $("#otpEmailForm").hidden = false; $("#otpEmail").focus(); return;
-      case "otp-resend": { el.disabled = true; sb.auth.signInWithOtp({ email: otpEmail, options: { shouldCreateUser: true, emailRedirectTo: authRedirect() } }).then(({ error }) => { if (error) { $("#otpCodeError").hidden = false; $("#otpCodeError").textContent = t("ac.err.wait"); el.disabled = false; } else { toast(t("ac.codeResent")); startResendCountdown(); } }); return; }
+      case "signin-thanks": sessionStorage.setItem("albabar.preferSignup", "1"); return goSignIn(store.get("lastOrder", {}).email || "", "account.html");
+      case "go-signup": return showAuthTab("signup");
+      case "go-signin": return showAuthTab("signin");
+      case "show-forgot": $("#signinForm").hidden = true; $("#forgotForm").hidden = false; $("#fgEmail").value = $("#siEmail").value; $("#fgEmail").focus(); return;
+      case "hide-forgot": $("#forgotForm").hidden = true; $("#signinForm").hidden = false; return;
       case "signout": sb.auth.signOut().then(() => { user = null; updateAuthUI(); PAGES.account.render(); toast(t("ac.signedOut")); }); return;
       case "filters-toggle": $("#filters").classList.toggle("is-open"); return;
     }
@@ -840,7 +869,7 @@
         await saveProfile({ full_name: $("#fName").value.trim(), phone: $("#fPhone").value.trim(), city: $("#fCity").value,
                             address: $("#fAddress").value.trim(), landmark: $("#fLandmark").value.trim() || null });
       }
-      store.set("lastOrder", { no: data[0].order_no, lines: cart, total: data[0].total, email: user ? user.email : $("#fEmail").value.trim().toLowerCase() });
+      store.set("lastOrder", { no: data[0].order_no, claimToken: data[0].claim_token || null, lines: cart, total: data[0].total, email: user ? user.email : $("#fEmail").value.trim().toLowerCase() });
       cart = []; store.set("cart", cart);
       location.href = "thank-you.html";
     }
@@ -855,33 +884,56 @@
       if (error) return toast(serverError(error));
       f.reset(); $("#ctSent").hidden = false;
     }
-    // Sign in step 1: email → we email a 6-digit code (a new account is created automatically)
-    if (f.id === "otpEmailForm") {
+    // Sign in with email + password
+    if (f.id === "signinForm") {
       e.preventDefault();
+      showErr("#siError", "");
       if (!validate(f) || !sb) return;
       busy(f, true);
-      otpEmail = $("#otpEmail").value.trim().toLowerCase();
-      const { error } = await sb.auth.signInWithOtp({ email: otpEmail, options: { shouldCreateUser: true, emailRedirectTo: authRedirect() } });
+      const { error } = await sb.auth.signInWithPassword({ email: $("#siEmail").value.trim().toLowerCase(), password: $("#siPass").value });
       busy(f, false);
-      if (error) { $("#otpError").hidden = false; $("#otpError").textContent = /rate|seconds|security purposes/i.test(error.message) ? t("ac.err.wait") : t("ac.err.send"); return; }
-      $("#otpError").hidden = true;
-      f.hidden = true; $("#otpCodeForm").hidden = false;
-      $("#otpSentTo").textContent = t("ac.codeSent", { e: otpEmail });
-      $("#otpCode").value = ""; $("#otpCode").focus();
-      startResendCountdown();
+      if (error) return showErr("#siError", authError(error));
+      // the auth listener finishes the job (claims this browser's guest order, then shows My account)
     }
-    // Sign in step 2: the code from the email
-    if (f.id === "otpCodeForm") {
+    // Create an account: signed in straight away (no email needed)
+    if (f.id === "signupForm") {
       e.preventDefault();
+      showErr("#suError", "");
+      if (!validate(f) || !sb) return;
+      busy(f, true);
+      const name = $("#suName").value.trim();
+      const { data, error } = await sb.auth.signUp({ email: $("#suEmail").value.trim().toLowerCase(), password: $("#suPass").value });
+      if (error) { busy(f, false); return showErr("#suError", authError(error)); }
+      // Supabase hides "email already registered" by returning a user with no identities
+      if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) { busy(f, false); return showErr("#suError", t("ac.err.exists")); }
+      if (!data.session) { busy(f, false); return showErr("#suError", t("ac.err.needsConfirm")); }
+      user = data.user;
+      await saveProfile({ full_name: name });
+      busy(f, false);
+    }
+    // Forgot password: email a reset link (limited until an email service is connected)
+    if (f.id === "forgotForm") {
+      e.preventDefault();
+      showErr("#fgError", ""); $("#fgDone").hidden = true;
+      if (!validate(f) || !sb) return;
+      busy(f, true);
+      const { error } = await sb.auth.resetPasswordForEmail($("#fgEmail").value.trim().toLowerCase(), { redirectTo: authRedirect() });
+      busy(f, false);
+      if (error) return showErr("#fgError", /rate|seconds|too many/i.test(error.message) ? t("ac.err.resetLimit") : t("err.network"));
+      $("#fgDone").hidden = false; $("#fgDone").textContent = t("ac.forgot.sent");
+    }
+    // Choose a new password (after opening the reset email)
+    if (f.id === "resetForm") {
+      e.preventDefault();
+      showErr("#rsError", "");
       if (!validate(f)) return;
       busy(f, true);
-      const { error } = await sb.auth.verifyOtp({ email: otpEmail, token: $("#otpCode").value.trim(), type: "email" });
-      if (error) { busy(f, false); $("#otpCodeError").hidden = false; $("#otpCodeError").textContent = t("ac.err.code"); return; }
-      if (await afterSignIn()) return;
+      const { error } = await sb.auth.updateUser({ password: $("#rsPass").value });
       busy(f, false);
+      if (error) return showErr("#rsError", authError(error));
+      recovering = false;
       const { data } = await sb.auth.getSession(); user = data.session?.user || null;
-      updateAuthUI(); PAGES.account.render();
-      toast(t("ac.welcome"));
+      updateAuthUI(); PAGES.account.render(); toast(t("ac.reset.done"));
     }
     if (f.id === "profileForm") {
       e.preventDefault();

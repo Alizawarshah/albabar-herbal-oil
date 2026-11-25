@@ -15,27 +15,61 @@
 <body data-page="account">
 <main id="main">
 
-  <!-- Signed out: sign in or create an account with an emailed code -->
+  <!-- Signed out: sign in or create an account (email + password) -->
   <section class="container container--xs signin" id="acctAuth">
-    <h1 data-i18n="ac.signin.title"></h1>
-    <p class="section__sub" data-i18n="ac.signin.sub"></p>
+    <div class="tabs signin__tabs" role="tablist">
+      <button class="is-active" data-tab="signin" role="tab" data-i18n="ac.signin.title"></button>
+      <button data-tab="signup" role="tab" data-i18n="ac.signup.title"></button>
+    </div>
 
-    <form id="otpEmailForm" novalidate>
-      <div class="field"><label class="mini" for="otpEmail" data-i18n="ac.email"></label><input id="otpEmail" type="email" autocomplete="email" inputmode="email" data-rule="email" data-err-key="err.email" /><small class="err"></small></div>
-      <p class="form-error" id="otpError" role="alert" hidden></p>
-      <button type="submit" class="btn btn--green btn--block btn--lg" data-i18n="ac.continue"></button>
-      <p class="muted small signin__note" data-i18n="ac.noPassword"></p>
-    </form>
+    <!-- Sign in -->
+    <div data-panel="signin" role="tabpanel">
+      <h1 data-i18n="ac.signin.title"></h1>
+      <p class="section__sub" data-i18n="ac.signin.sub"></p>
+      <form id="signinForm" novalidate>
+        <div class="field"><label class="mini" for="siEmail" data-i18n="ac.email"></label><input id="siEmail" type="email" autocomplete="email" inputmode="email" data-rule="email" data-err-key="err.email" /><small class="err"></small></div>
+        <div class="field"><label class="mini" for="siPass" data-i18n="ac.password"></label><input id="siPass" type="password" autocomplete="current-password" data-rule="passwordAny" data-err-key="ac.err.passEmpty" /><small class="err"></small></div>
+        <p class="form-error" id="siError" role="alert" hidden></p>
+        <button type="submit" class="btn btn--green btn--block btn--lg" data-i18n="ac.signin.btn"></button>
+        <div class="signin__links">
+          <button type="button" class="link-btn" data-act="show-forgot" data-i18n="ac.forgot"></button>
+          <button type="button" class="link-btn" data-act="go-signup" data-i18n="ac.noAccount"></button>
+        </div>
+      </form>
 
-    <form id="otpCodeForm" novalidate hidden>
-      <p id="otpSentTo" class="signin__sent"></p>
-      <div class="field"><label class="mini" for="otpCode" data-i18n="ac.code"></label><input id="otpCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="10" data-rule="code" data-err-key="ac.err.codeFormat" class="signin__code" /><small class="err"></small></div>
-      <p class="form-error" id="otpCodeError" role="alert" hidden></p>
-      <button type="submit" class="btn btn--green btn--block btn--lg" data-i18n="ac.verify"></button>
-      <div class="signin__links">
-        <button type="button" class="link-btn" data-act="otp-back" data-i18n="ac.otherEmail"></button>
-        <button type="button" class="link-btn" data-act="otp-resend" data-i18n="ac.resend"></button>
-      </div>
+      <!-- Forgot password -->
+      <form id="forgotForm" novalidate hidden>
+        <p class="signin__sent" data-i18n="ac.forgot.sub"></p>
+        <div class="field"><label class="mini" for="fgEmail" data-i18n="ac.email"></label><input id="fgEmail" type="email" autocomplete="email" data-rule="email" data-err-key="err.email" /><small class="err"></small></div>
+        <p class="form-error" id="fgError" role="alert" hidden></p>
+        <p class="form-success" id="fgDone" hidden></p>
+        <button type="submit" class="btn btn--green btn--block" data-i18n="ac.forgot.btn"></button>
+        <div class="signin__links"><button type="button" class="link-btn" data-act="hide-forgot" data-i18n="ac.backToSignin"></button></div>
+      </form>
+    </div>
+
+    <!-- Create account -->
+    <div data-panel="signup" role="tabpanel" hidden>
+      <h1 data-i18n="ac.signup.title"></h1>
+      <p class="section__sub" data-i18n="ac.signup.sub"></p>
+      <form id="signupForm" novalidate>
+        <div class="field"><label class="mini" for="suName" data-i18n="co.name"></label><input id="suName" type="text" autocomplete="name" data-rule="name" data-err-key="err.name" /><small class="err"></small></div>
+        <div class="field"><label class="mini" for="suEmail" data-i18n="ac.email"></label><input id="suEmail" type="email" autocomplete="email" inputmode="email" data-rule="email" data-err-key="err.email" /><small class="err"></small></div>
+        <div class="field"><label class="mini" for="suPass" data-i18n="ac.password.new"></label><input id="suPass" type="password" autocomplete="new-password" data-rule="password" data-err-key="ac.err.passShort" /><small class="err"></small></div>
+        <p class="form-error" id="suError" role="alert" hidden></p>
+        <button type="submit" class="btn btn--green btn--block btn--lg" data-i18n="ac.signup.btn"></button>
+        <div class="signin__links"><button type="button" class="link-btn" data-act="go-signin" data-i18n="ac.haveAccount"></button></div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Opened from a password-reset email: choose a new password -->
+  <section class="container container--xs signin" id="acctReset" hidden>
+    <h1 data-i18n="ac.reset.title"></h1>
+    <form id="resetForm" novalidate>
+      <div class="field"><label class="mini" for="rsPass" data-i18n="ac.password.new"></label><input id="rsPass" type="password" autocomplete="new-password" data-rule="password" data-err-key="ac.err.passShort" /><small class="err"></small></div>
+      <p class="form-error" id="rsError" role="alert" hidden></p>
+      <button type="submit" class="btn btn--green btn--block btn--lg" data-i18n="ac.reset.btn"></button>
     </form>
   </section>
 
