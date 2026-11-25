@@ -549,6 +549,25 @@
     $$(".nav__login span").forEach((s) => (s.textContent = lbl));
   }
   let authReady = false;
+  // Where the emailed sign-in link brings the customer back to (must be allowed in Supabase → Auth → URL Configuration)
+  const authRedirect = () => location.origin + (location.hostname === "localhost" ? "/account.html" : "/account");
+  // A used or expired emailed link comes back with an error in the address (#error_code=otp_expired …)
+  let linkError = "";
+  {
+    const h = new URLSearchParams(location.hash.slice(1));
+    if (h.get("error_code") || h.get("error")) {
+      linkError = h.get("error_code") === "otp_expired" ? "ac.err.linkUsed" : "ac.err.link";
+      history.replaceState(null, "", location.pathname + location.search);
+    }
+  }
+  async function afterSignIn() {
+    await sb.rpc("claim_my_orders"); // earlier orders placed with this (now proven) email show in the account
+    const next = sessionStorage.getItem("albabar.next");
+    sessionStorage.removeItem("albabar.next");
+    sessionStorage.removeItem("albabar.signinEmail");
+    if (next && !location.pathname.startsWith("/" + next.replace(/\.html$/, ""))) { location.href = next; return true; }
+    return false;
+  }
   async function initAuth() {
     if (!sb) return;
     const { data } = await sb.auth.getSession();
@@ -556,11 +575,15 @@
     authReady = true;
     updateAuthUI();
     if (["account", "checkout", "thanks"].includes(PAGE)) PAGES[PAGE].render();
-    sb.auth.onAuthStateChange((_event, session) => {
+    sb.auth.onAuthStateChange((event, session) => {
       const changed = (session?.user?.id || null) !== (user?.id || null);
       user = session?.user || null;
       // never call Supabase directly inside this callback; defer instead
-      if (changed) setTimeout(() => { updateAuthUI(); if (["account", "checkout", "thanks"].includes(PAGE)) PAGES[PAGE].render(); }, 0);
+      if (changed) setTimeout(async () => {
+        if (event === "SIGNED_IN" && (await afterSignIn())) return;
+        updateAuthUI(); if (["account", "checkout", "thanks"].includes(PAGE)) PAGES[PAGE].render();
+        if (event === "SIGNED_IN" && PAGE === "account") toast(t("ac.welcome"));
+      }, 0);
     });
   }
   const goSignIn = (email, next) => {
@@ -584,6 +607,7 @@
       if (sb && !authReady) { $("#acctAuth").hidden = true; $("#acctDash").hidden = true; return; }
       $("#acctAuth").hidden = !!user; $("#acctDash").hidden = !user;
       if (!user) {
+        if (linkError) { $("#otpError").hidden = false; $("#otpError").textContent = t(linkError); linkError = ""; }
         const pre = sessionStorage.getItem("albabar.signinEmail");
         if (pre && !$("#otpEmail").value) $("#otpEmail").value = pre;
         return;
@@ -735,7 +759,7 @@
       case "signin-checkout": return goSignIn("", "checkout.html");
       case "signin-thanks": return goSignIn(store.get("lastOrder", {}).email || "", "account.html");
       case "otp-back": clearInterval(resendTimer); $("#otpCodeForm").hidden = true; $("#otpEmailForm").hidden = false; $("#otpEmail").focus(); return;
-      case "otp-resend": { el.disabled = true; sb.auth.signInWithOtp({ email: otpEmail, options: { shouldCreateUser: true } }).then(({ error }) => { if (error) { $("#otpCodeError").hidden = false; $("#otpCodeError").textContent = t("ac.err.wait"); el.disabled = false; } else { toast(t("ac.codeResent")); startResendCountdown(); } }); return; }
+      case "otp-resend": { el.disabled = true; sb.auth.signInWithOtp({ email: otpEmail, options: { shouldCreateUser: true, emailRedirectTo: authRedirect() } }).then(({ error }) => { if (error) { $("#otpCodeError").hidden = false; $("#otpCodeError").textContent = t("ac.err.wait"); el.disabled = false; } else { toast(t("ac.codeResent")); startResendCountdown(); } }); return; }
       case "signout": sb.auth.signOut().then(() => { user = null; updateAuthUI(); PAGES.account.render(); toast(t("ac.signedOut")); }); return;
       case "filters-toggle": $("#filters").classList.toggle("is-open"); return;
     }
@@ -837,7 +861,7 @@
       if (!validate(f) || !sb) return;
       busy(f, true);
       otpEmail = $("#otpEmail").value.trim().toLowerCase();
-      const { error } = await sb.auth.signInWithOtp({ email: otpEmail, options: { shouldCreateUser: true } });
+      const { error } = await sb.auth.signInWithOtp({ email: otpEmail, options: { shouldCreateUser: true, emailRedirectTo: authRedirect() } });
       busy(f, false);
       if (error) { $("#otpError").hidden = false; $("#otpError").textContent = /rate|seconds|security purposes/i.test(error.message) ? t("ac.err.wait") : t("ac.err.send"); return; }
       $("#otpError").hidden = true;
@@ -853,11 +877,7 @@
       busy(f, true);
       const { error } = await sb.auth.verifyOtp({ email: otpEmail, token: $("#otpCode").value.trim(), type: "email" });
       if (error) { busy(f, false); $("#otpCodeError").hidden = false; $("#otpCodeError").textContent = t("ac.err.code"); return; }
-      await sb.rpc("claim_my_orders"); // earlier orders placed with this email now show in the account
-      sessionStorage.removeItem("albabar.signinEmail");
-      const next = sessionStorage.getItem("albabar.next");
-      sessionStorage.removeItem("albabar.next");
-      if (next) { location.href = next; return; }
+      if (await afterSignIn()) return;
       busy(f, false);
       const { data } = await sb.auth.getSession(); user = data.session?.user || null;
       updateAuthUI(); PAGES.account.render();
