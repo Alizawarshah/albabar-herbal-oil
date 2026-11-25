@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Search – البابر Herbal Oil</title>
+  <meta name="robots" content="noindex" />
+  <meta name="description" content="Search البابر Herbal Oil products." />
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600&family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Rozha+One&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="search">
+<main id="main">
+  <div class="container">
+    <div class="page-head page-head--center"><h1 data-i18n="search.title"></h1>
+      <form class="search-page__form" action="search.html"><input type="search" name="q" id="searchPageInput" data-i18n-ph="search.ph" /><button class="btn btn--green" type="submit" data-i18n="search.btn"></button></form>
+      <p class="muted" id="searchInfo"></p>
+    </div>
+    <div class="product-grid product-grid--page" id="searchGrid"></div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

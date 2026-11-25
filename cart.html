@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your cart – البابر Herbal Oil</title>
+  <meta name="robots" content="noindex" />
+  <meta name="description" content="Your shopping cart at البابر Herbal Oil." />
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600&family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Rozha+One&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="cart">
+<main id="main">
+  <div class="container cart-page">
+    <div class="cart-page__head"><h1 data-i18n="cart.title"></h1><a href="shop.html" class="link-arrow" data-i18n="cart.continue"></a></div>
+    <div id="cartEmpty" class="cart-empty cart-empty--page" hidden>
+      <svg viewBox="0 0 24 24"><path d="M5 7h14l-1.2 12.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 7V6a3 3 0 0 1 6 0v1"/></svg>
+      <p data-i18n="cart.empty"></p>
+      <a href="shop.html" class="btn btn--gold" data-i18n="cart.continue"></a>
+    </div>
+    <div id="cartFull" hidden>
+      <div class="cart-table-head"><span data-i18n="cart.product"></span><span data-i18n="cart.qty"></span><span data-i18n="cart.total"></span></div>
+      <div id="cartRows"></div>
+      <div class="cart-summary">
+        <div class="cart-summary__sub"><span data-i18n="cart.estimated"></span><b id="cartPageSub"></b></div>
+        <p class="muted small" data-i18n="cart.note"></p>
+        <a href="checkout.html" class="btn btn--green btn--lg btn--block" data-i18n="cart.checkout"></a>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

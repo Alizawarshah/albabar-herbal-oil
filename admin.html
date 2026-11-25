@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Orders – البابر Herbal Oil admin</title>
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600&family=Noto+Nastaliq+Urdu:wght@700&family=Rozha+One&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body class="admin">
+  <header class="header header--minimal">
+    <div class="container header__inner">
+      <a href="index.html" class="logo"><span class="logo__ar">البابر</span><span class="logo__en">Herbal Oil</span></a>
+      <div class="admin__who" id="who" hidden><span id="whoEmail"></span><button class="btn btn--line" id="signOut">Sign out</button></div>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+    <!-- Sign in -->
+    <section id="loginView" class="admin__login" hidden>
+      <h1>Shop admin</h1>
+      <p class="muted">Sign in with the admin account you created in Supabase.</p>
+      <form id="loginForm" novalidate>
+        <div class="field"><label class="mini" for="aEmail">Email</label><input id="aEmail" type="email" autocomplete="username" required /></div>
+        <div class="field"><label class="mini" for="aPass">Password</label><input id="aPass" type="password" autocomplete="current-password" required /></div>
+        <p class="form-error" id="loginError" role="alert" hidden></p>
+        <button class="btn btn--green btn--block btn--lg" type="submit">Sign in</button>
+      </form>
+    </section>
+
+    <!-- Signed in but not an admin -->
+    <section id="notAdmin" class="admin__login" hidden>
+      <h1>This page is for the shop owner</h1>
+      <p class="muted">Your account doesn't have access here. To see your orders, go to <a class="text-link" href="account.html">My account</a>.</p>
+      <p class="muted small">Account ID (for the owner only): <code id="uid"></code></p>
+    </section>
+
+    <!-- Dashboard -->
+    <section id="dash" hidden>
+      <div class="admin__top">
+        <h1>Orders</h1>
+        <div class="tabs admin__tabs" role="tablist">
+          <button class="is-active" data-view="orders" role="tab">Orders</button>
+          <button data-view="messages" role="tab">Messages</button>
+          <button data-view="products" role="tab">Prices and stock</button>
+        </div>
+      </div>
+
+      <div data-panel="orders">
+        <div class="admin__bar">
+          <div class="admin__filters" id="statusFilters"></div>
+          <button class="btn btn--line" id="refresh">Refresh</button>
+        </div>
+        <p class="muted" id="ordersInfo"></p>
+        <div class="admin__list" id="orders"></div>
+      </div>
+
+      <div data-panel="messages" hidden>
+        <div class="admin__list" id="messages"></div>
+      </div>
+
+      <div data-panel="products" hidden>
+        <p class="muted">Changes show on the website straight away.</p>
+        <div class="admin__list" id="products"></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My account – البابر Herbal Oil</title>
+  <meta name="robots" content="noindex" />
+  <meta name="description" content="Sign in to see your البابر Herbal Oil orders and saved address." />
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600&family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Rozha+One&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="account">
+<main id="main">
+
+  <!-- Signed out: sign in or create an account with an emailed code -->
+  <section class="container container--xs signin" id="acctAuth">
+    <h1 data-i18n="ac.signin.title"></h1>
+    <p class="section__sub" data-i18n="ac.signin.sub"></p>
+
+    <form id="otpEmailForm" novalidate>
+      <div class="field"><label class="mini" for="otpEmail" data-i18n="ac.email"></label><input id="otpEmail" type="email" autocomplete="email" inputmode="email" data-rule="email" data-err-key="err.email" /><small class="err"></small></div>
+      <p class="form-error" id="otpError" role="alert" hidden></p>
+      <button type="submit" class="btn btn--green btn--block btn--lg" data-i18n="ac.continue"></button>
+      <p class="muted small signin__note" data-i18n="ac.noPassword"></p>
+    </form>
+
+    <form id="otpCodeForm" novalidate hidden>
+      <p id="otpSentTo" class="signin__sent"></p>
+      <div class="field"><label class="mini" for="otpCode" data-i18n="ac.code"></label><input id="otpCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="10" data-rule="code" data-err-key="ac.err.codeFormat" class="signin__code" /><small class="err"></small></div>
+      <p class="form-error" id="otpCodeError" role="alert" hidden></p>
+      <button type="submit" class="btn btn--green btn--block btn--lg" data-i18n="ac.verify"></button>
+      <div class="signin__links">
+        <button type="button" class="link-btn" data-act="otp-back" data-i18n="ac.otherEmail"></button>
+        <button type="button" class="link-btn" data-act="otp-resend" data-i18n="ac.resend"></button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Signed in: orders and saved details -->
+  <section class="container account-dash" id="acctDash" hidden>
+    <header class="account-dash__head">
+      <div><h1 data-i18n="ac.myaccount"></h1><p class="muted" id="acctEmail"></p></div>
+      <button type="button" class="btn btn--line" data-act="signout" data-i18n="ac.signout"></button>
+    </header>
+
+    <div class="tabs account-dash__tabs" role="tablist">
+      <button class="is-active" data-tab="orders" role="tab" data-i18n="ac.orders"></button>
+      <button data-tab="profile" role="tab" data-i18n="ac.profile"></button>
+    </div>
+
+    <div data-panel="orders" role="tabpanel">
+      <div id="myOrders" class="myorders"></div>
+    </div>
+
+    <div data-panel="profile" role="tabpanel" hidden>
+      <p class="muted" data-i18n="ac.profileSub"></p>
+      <form id="profileForm" class="profile-form" novalidate>
+        <div class="field-row">
+          <div class="field"><label class="mini" for="pName" data-i18n="co.name"></label><input id="pName" type="text" autocomplete="name" /></div>
+          <div class="field"><label class="mini" for="pPhone" data-i18n="ct.phone"></label><input id="pPhone" type="tel" autocomplete="tel" data-rule="phoneOpt" data-err-key="err.phone" /><small class="err"></small></div>
+        </div>
+        <div class="field"><label class="mini" for="pCity" data-i18n="co.cityLabel"></label><select id="pCity"></select></div>
+        <div class="field"><label class="mini" for="pAddress" data-i18n="co.address"></label><input id="pAddress" type="text" autocomplete="street-address" /></div>
+        <div class="field"><label class="mini" for="pLandmark" data-i18n="co.landmark"></label><input id="pLandmark" type="text" /></div>
+        <button type="submit" class="btn btn--green" data-i18n="ac.save"></button>
+      </form>
+    </div>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

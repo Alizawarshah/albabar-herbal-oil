@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout – البابر Herbal Oil</title>
+  <meta name="robots" content="noindex" />
+  <meta name="description" content="Place your Cash on Delivery order for البابر Herbal Oil." />
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600&family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Rozha+One&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="checkout" data-layout="minimal">
+<main id="main">
+  <div class="page--checkout">
+  <div class="checkout">
+    <form class="checkout__form" id="checkoutForm" novalidate>
+      <h1 class="sr-only" data-i18n="co.title"></h1>
+      <nav class="breadcrumb breadcrumb--co"><a href="cart.html" data-i18n="cart.title"></a> › <b data-i18n="co.title"></b></nav>
+      <p class="co-account" id="coAccount"></p>
+      <h2 data-i18n="co.contact"></h2>
+      <div class="field"><label class="mini" for="fPhone" data-i18n="co.phone"></label><input id="fPhone" type="tel" autocomplete="tel" inputmode="numeric" data-rule="phone" data-err-key="err.phone" /><small class="err"></small></div>
+      <div class="field"><label class="mini" for="fEmail" data-i18n="co.email"></label><input id="fEmail" type="email" autocomplete="email" data-rule="email" data-err-key="err.email" /><small class="err"></small></div>
+      <h2 data-i18n="co.delivery"></h2>
+      <div class="field"><label class="mini" data-i18n="co.country"></label><select disabled><option data-i18n="co.pk"></option></select></div>
+      <div class="field"><label class="mini" for="fName" data-i18n="co.name"></label><input id="fName" type="text" autocomplete="name" data-rule="name" data-err-key="err.name" /><small class="err"></small></div>
+      <div class="field"><label class="mini" for="fCity" data-i18n="co.cityLabel"></label><select id="fCity" data-rule="city" data-err-key="err.city"></select><small class="err"></small></div>
+      <div class="field"><label class="mini" for="fAddress" data-i18n="co.address"></label><input id="fAddress" type="text" autocomplete="street-address" data-rule="address" data-err-key="err.address" /><small class="err"></small></div>
+      <div class="field"><label class="mini" for="fLandmark" data-i18n="co.landmark"></label><input id="fLandmark" type="text" /></div>
+      <div class="field"><label class="mini" for="fNotes" data-i18n="co.notes"></label><textarea id="fNotes" rows="2"></textarea></div>
+      <label class="check save-details" id="saveDetailsRow" hidden><input type="checkbox" id="saveDetails" checked /> <span data-i18n="co.saveDetails"></span></label>
+      <h2 data-i18n="co.ship"></h2>
+      <div class="option option--active"><span data-i18n="co.std"></span><b data-i18n="co.free"></b></div>
+      <h2 data-i18n="co.pay"></h2>
+      <p class="muted" data-i18n="co.secure"></p>
+      <div class="option-group" role="radiogroup" aria-label="Payment method">
+        <label class="option option--radio"><input type="radio" name="pay" value="cod" checked /><span><b data-i18n="co.cod"></b><small data-i18n="co.codsub"></small></span></label>
+        <label class="option option--radio"><input type="radio" name="pay" value="bank" /><span><b data-i18n="co.bank"></b><small data-i18n="co.banksub"></small></span></label>
+      </div>
+      <p class="form-error" id="coError" role="alert" hidden></p>
+      <button type="submit" class="btn btn--green btn--block btn--lg" data-i18n="co.place"></button>
+      <p class="checkout__back"><a href="cart.html">‹ <span data-i18n="co.back"></span></a></p>
+    </form>
+    <aside class="checkout__summary">
+      <h2 data-i18n="co.summary"></h2>
+      <div id="coItems"></div>
+      <div class="discount"><input id="coCode" type="text" data-i18n-ph="co.discount" /><button type="button" class="btn btn--outline" data-act="co-apply" data-i18n="co.apply"></button></div>
+      <small class="muted" id="coCodeMsg" data-i18n="co.hint"></small>
+      <div class="totals">
+        <div><span data-i18n="cart.subtotal"></span><span id="coSub"></span></div>
+        <div id="coDiscRow" hidden><span data-i18n="co.discountline"></span><span id="coDisc"></span></div>
+        <div><span data-i18n="co.shipping"></span><span data-i18n="co.free"></span></div>
+        <div class="totals__grand"><span data-i18n="co.total"></span><b id="coTotal"></b></div>
+      </div>
+    </aside>
+  </div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

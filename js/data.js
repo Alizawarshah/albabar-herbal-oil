@@ -1,0 +1,452 @@
+/* =========================================================
+   البابر Herbal Oil — site content
+   • All text is [English, Urdu].
+   • Photos are free Unsplash placeholders (unsplash.com/license).
+     Replace them with your own product photos later —
+     either an Unsplash id or a local path like "Images/banner-1.jpg".
+   ========================================================= */
+
+const SITE = {
+  whatsapp: "923001234567",          // used for wa.me links (placeholder)
+  whatsappText: "0300 1234567",
+  email: "info@albabar.pk",
+  courierTrackUrl: "https://www.tcsexpress.com/",
+  // Social pages: paste the full link to show the icon; leave "" to hide it.
+  social: {
+    facebook: "",   // e.g. "https://www.facebook.com/albabar"
+    instagram: "",
+    tiktok: "",
+    youtube: "",
+  },
+};
+
+/* ---------- Hero (one image OR one video) ----------
+   Image: { type: "image", src: "Images/hero.jpg", link: "shop.html" }   (1920 × 800)
+   Video: { type: "video", src: "Images/hero.mp4", poster: "Images/hero.jpg", link: "shop.html" }
+   The current image is a stock placeholder from Unsplash. */
+const HERO = { type: "image", src: "1787287247603-6cba84e7ccd7", link: "shop.html" };
+
+/* ---------- Products (placeholder prices) ---------- */
+const PRODUCTS = [
+  { id: "oil-200", collection: "hair-oil", price: 1999, compare: 2499, sold: 846, badge: "best", inStock: true,
+    name: ["Herbal Hair Oil 200ml", "ہربل ہیئر آئل 200 ملی لیٹر"],
+    tag: ["Most popular", "سب سے مقبول"], pack: ["1 × 200ml", "1 × 200 ملی لیٹر"],
+    imgs: ["1608571424266-edeb9bbefdec", "1671493235081-5842463637cd", "1671493229066-f36e86b35841", "1765118527220-da9c7a560b13"] },
+  { id: "oil-100", collection: "hair-oil", price: 1199, compare: 1499, sold: 312, inStock: true,
+    name: ["Herbal Hair Oil 100ml", "ہربل ہیئر آئل 100 ملی لیٹر"],
+    tag: ["Trial size", "ٹرائل سائز"], pack: ["1 × 100ml", "1 × 100 ملی لیٹر"],
+    imgs: ["1608571423902-eed4a5ad8108", "1608571702600-5a5419d31475", "1515377905703-c4788e51af15", "1722166348034-6b54c0fbf59b"] },
+  { id: "duo", collection: "bundles", price: 3599, compare: 4998, sold: 205, inStock: true,
+    name: ["Duo Pack (2 × 200ml)", "ڈوو پیک (2 × 200 ملی لیٹر)"],
+    tag: ["For you & family", "آپ اور گھر والوں کے لیے"], pack: ["2 × 200ml", "2 × 200 ملی لیٹر"],
+    imgs: ["1671493229048-4dddd00ca84a", "1671493234884-b1611bcf3e69", "1671493229061-eb52f14820f4", "1787287247603-6cba84e7ccd7"] },
+  { id: "family", collection: "bundles", price: 4999, compare: 7497, sold: 168, badge: "value", inStock: true,
+    name: ["Family Pack (3 × 200ml)", "فیملی پیک (3 × 200 ملی لیٹر)"],
+    tag: ["Full 3-month course", "مکمل 3 ماہ کا کورس"], pack: ["3 × 200ml", "3 × 200 ملی لیٹر"],
+    imgs: ["1624454002302-36b824d7bd0a", "1787287247649-6c3513ad45b9", "1590518563786-901882bf6f82", "1608797178974-15b35a64ede9"] },
+];
+
+const INGREDIENTS = [
+  { n: ["Amla", "آملہ"], b: ["Strengthens roots", "جڑیں مضبوط کرے"], img: "1722166348034-6b54c0fbf59b" },
+  { n: ["Bhringraj", "بھرنگراج"], b: ["Boosts growth", "نشوونما بڑھائے"], img: "1655252204809-34e9c092a380" },
+  { n: ["Kalonji", "کلونجی"], b: ["Reduces hair fall", "بالوں کا گرنا کم کرے"], img: "1765308623957-d84f4a92cc40" },
+  { n: ["Methi", "میتھی"], b: ["Adds thickness", "بالوں کو گھنا کرے"], img: "1547390318-1f1a4f5ed89c" },
+  { n: ["Reetha", "ریٹھا"], b: ["Cleanses scalp", "سر کی جلد صاف کرے"], img: "1759064716219-ba8c60a7ce07" },
+  { n: ["Shikakai", "سیکاکائی"], b: ["Natural shine", "قدرتی چمک"], img: "1778423618433-3d22be55a790" },
+  { n: ["Rosemary", "روزمیری"], b: ["Stimulates scalp", "سر کی جلد کو متحرک کرے"], img: "1760445529648-9c8af38a0bb3" },
+  { n: ["Curry Leaves", "کڑی پتہ"], b: ["Helps prevent greying", "سفید بالوں سے بچاؤ"], img: "1789194980416-35d3d64cc805" },
+  { n: ["Coconut Oil", "ناریل کا تیل"], b: ["Deep nourishment", "گہری غذائیت"], img: "1560769680-ba2f3767c785" },
+  { n: ["Almond Oil", "بادام کا تیل"], b: ["Softness & repair", "نرمی اور مرمت"], img: "1608797178974-15b35a64ede9" },
+];
+
+const PROCESS = [
+  { t: ["Hand-picked herbs", "ہاتھ سے چنی جڑی بوٹیاں"], d: ["Fresh herbs are sourced and sorted by hand.", "تازہ جڑی بوٹیاں حاصل کر کے ہاتھ سے چھانٹی جاتی ہیں۔"], img: "1788096787401-fef3abc47611", c: "#ede4f3" },
+  { t: ["Washed and dried", "دھلائی اور خشک کرنا"], d: ["Cleaned and naturally dried to keep their goodness.", "صاف کر کے قدرتی طور پر خشک کیا جاتا ہے تاکہ تاثیر برقرار رہے۔"], img: "1509156396595-449e10c5cd3e", c: "#e3efdc" },
+  { t: ["Slow-cooked, desi style", "دھیمی آنچ پر دیسی طریقہ"], d: ["Cooked for hours on a low flame in pure base oils.", "خالص تیلوں میں گھنٹوں دھیمی آنچ پر پکایا جاتا ہے۔"], img: "1758524151953-d87150127c63", c: "#e8ecee" },
+  { t: ["Filtered and bottled", "چھان کر بوتل میں"], d: ["Filtered, rested and sealed in hygienic bottles.", "چھان کر، ٹھہرا کر صاف ستھری بوتلوں میں سیل کیا جاتا ہے۔"], img: "1787287247649-6c3513ad45b9", c: "#f6e6d8" },
+];
+
+const CUSTOMER_PHOTOS = [
+  "1496440737103-cd596325d314", "1589424214513-b672297bf8c4", "1786596550584-0872c369957c", "1671493229066-f36e86b35841",
+  "1599407365109-d62ea7d81a42", "1771984019563-bd7141147457", "1613477757159-7fbb73011611", "1515377905703-c4788e51af15",
+  "1735725034429-6811676de18a", "1606093310846-4aeb4a11378f", "1584339312444-6952d098e152", "1671493229061-eb52f14820f4",
+];
+
+const VIDEOS = [
+  { h: "@ayesha.glow", img: "1599407365109-d62ea7d81a42" },
+  { h: "@sana.styles", img: "1496440737103-cd596325d314" },
+  { h: "@fatima.z", img: "1786596550584-0872c369957c" },
+  { h: "@hira_khan", img: "1589424214513-b672297bf8c4" },
+  { h: "@mehwish_t", img: "1771984019563-bd7141147457" },
+  { h: "@zara.official", img: "1606093310846-4aeb4a11378f" },
+];
+
+const BEFORE_AFTER = [
+  { before: "1602549179763-ce6c9df961b7", after: "1620939391250-eb822ac0818a", w: 6 },
+  { before: "1560264641-1b5191cc63e2", after: "1613477757159-7fbb73011611", w: 8 },
+  { before: "1606093310846-4aeb4a11378f", after: "1599407365109-d62ea7d81a42", w: 10 },
+];
+
+const REVIEWS = [
+  { n: "Ayesha K.", c: ["Lahore", "لاہور"], t: ["My hair fall reduced noticeably in about a month. The smell is light and it washes out easily.", "تقریباً ایک مہینے میں بالوں کا گرنا واضح طور پر کم ہو گیا۔ خوشبو ہلکی ہے اور آسانی سے دھل جاتا ہے۔"] },
+  { n: "Hamza R.", c: ["Karachi", "کراچی"], t: ["Ordered the Duo Pack for me and my mother. Delivered in 3 days, paid cash at the door.", "اپنے اور امی کے لیے ڈوو پیک منگوایا۔ 3 دن میں ڈیلیوری ہوئی، دروازے پر نقد ادائیگی کی۔"] },
+  { n: "Sana M.", c: ["Islamabad", "اسلام آباد"], t: ["Feels just like the desi oil my nani used to make. Dandruff is almost gone.", "بالکل نانی کے ہاتھ کے بنے دیسی تیل جیسا۔ خشکی تقریباً ختم ہو گئی ہے۔"] },
+  { n: "Fatima Z.", c: ["Multan", "ملتان"], t: ["Baby hairs are coming back around my hairline after 6 weeks. Very happy!", "6 ہفتوں بعد ماتھے کے پاس نئے بال آ رہے ہیں۔ بہت خوش ہوں!"] },
+  { n: "Bilal A.", c: ["Faisalabad", "فیصل آباد"], t: ["Not sticky at all. I use it twice a week before washing — hair feels much stronger.", "بالکل چپچپا نہیں۔ ہفتے میں دو بار دھونے سے پہلے لگاتا ہوں — بال کافی مضبوط لگتے ہیں۔"] },
+  { n: "Mehwish T.", c: ["Peshawar", "پشاور"], t: ["Great packaging and the team confirmed my order on WhatsApp quickly.", "بہترین پیکنگ، اور ٹیم نے واٹس ایپ پر جلدی آرڈر کنفرم کیا۔"] },
+];
+
+const FAQS = [
+  { q: ["How soon will I see results?", "نتائج کتنی جلدی نظر آئیں گے؟"], a: ["Most customers notice less hair fall in 3–4 weeks and new growth in 6–8 weeks with regular use (2–3 times a week).", "باقاعدہ استعمال (ہفتے میں 2–3 بار) سے زیادہ تر گاہکوں کو 3–4 ہفتوں میں بالوں کا گرنا کم اور 6–8 ہفتوں میں نئے بال نظر آتے ہیں۔"] },
+  { q: ["Is it safe for all hair types and for kids?", "کیا یہ ہر قسم کے بالوں اور بچوں کے لیے محفوظ ہے؟"], a: ["Yes. It is made only from herbs and natural oils with no added chemicals. For young children, do a small patch test first.", "جی ہاں۔ یہ صرف جڑی بوٹیوں اور قدرتی تیلوں سے بنا ہے، کوئی کیمیکل شامل نہیں۔ چھوٹے بچوں کے لیے پہلے تھوڑا سا لگا کر آزما لیں۔"] },
+  { q: ["How long does delivery take?", "ڈیلیوری میں کتنا وقت لگتا ہے؟"], a: ["2–3 working days in major cities and 3–5 working days elsewhere in Pakistan. Delivery is free.", "بڑے شہروں میں 2–3 ورکنگ دن اور پاکستان کے باقی علاقوں میں 3–5 ورکنگ دن۔ ڈیلیوری مفت ہے۔"] },
+  { q: ["Can I pay when I receive the parcel?", "کیا میں پارسل ملنے پر ادائیگی کر سکتا/سکتی ہوں؟"], a: ["Yes — Cash on Delivery is available all over Pakistan. You can also pay by bank transfer, JazzCash or Easypaisa.", "جی ہاں — پورے پاکستان میں کیش آن ڈیلیوری دستیاب ہے۔ آپ بینک ٹرانسفر، جاز کیش یا ایزی پیسہ سے بھی ادائیگی کر سکتے ہیں۔"] },
+  { q: ["Is the oil sticky or strong-smelling?", "کیا تیل چپچپا ہے یا اس کی خوشبو تیز ہے؟"], a: ["No. It has a light herbal fragrance and washes out easily with any mild shampoo.", "نہیں۔ اس کی ہلکی ہربل خوشبو ہے اور کسی بھی ہلکے شیمپو سے آسانی سے دھل جاتا ہے۔"] },
+];
+
+const CITIES = ["Karachi", "Lahore", "Islamabad", "Rawalpindi", "Faisalabad", "Multan", "Peshawar", "Quetta", "Hyderabad", "Gujranwala", "Sialkot", "Bahawalpur", "Sargodha", "Sukkur", "Abbottabad", "Mardan", "Other"];
+
+/* ---------- Policy pages ---------- */
+const POLICIES = {
+  shipping: {
+    title: ["Shipping policy", "شپنگ پالیسی"],
+    body: [
+      ["Free delivery on every order, all over Pakistan.", "Orders are confirmed by phone or WhatsApp, then dispatched within 24 hours.", "Delivery time: 2–3 working days in major cities, 3–5 working days in other areas.", "You will receive a tracking number by SMS / WhatsApp once your parcel is dispatched."],
+      ["پورے پاکستان میں ہر آرڈر پر مفت ڈیلیوری۔", "آرڈر کی فون یا واٹس ایپ پر تصدیق کے بعد 24 گھنٹوں میں روانگی۔", "ڈیلیوری کا وقت: بڑے شہروں میں 2–3 ورکنگ دن، دوسرے علاقوں میں 3–5 ورکنگ دن۔", "پارسل روانہ ہونے پر آپ کو SMS / واٹس ایپ پر ٹریکنگ نمبر بھیجا جائے گا۔"],
+    ],
+  },
+  refund: {
+    title: ["Refunds and returns", "ریفنڈ اور واپسی کی پالیسی"],
+    body: [
+      ["Unopened bottles can be returned within 7 days of delivery.", "If your parcel arrives damaged or leaking, send a photo on WhatsApp within 48 hours and we will replace it free of charge.", "Refunds are sent by bank transfer, JazzCash or Easypaisa within 5 working days after we receive the return.", "Opened or used bottles cannot be returned for hygiene reasons."],
+      ["بغیر کھلی بوتلیں ڈیلیوری کے 7 دن کے اندر واپس کی جا سکتی ہیں۔", "اگر پارسل خراب یا لیک حالت میں ملے تو 48 گھنٹوں میں واٹس ایپ پر تصویر بھیجیں، ہم مفت تبدیل کر دیں گے۔", "واپسی موصول ہونے کے 5 ورکنگ دنوں میں رقم بینک ٹرانسفر، جاز کیش یا ایزی پیسہ سے واپس کی جاتی ہے۔", "صفائی کی وجہ سے کھلی یا استعمال شدہ بوتلیں واپس نہیں ہو سکتیں۔"],
+    ],
+  },
+  privacy: {
+    title: ["Privacy policy", "پرائیویسی پالیسی"],
+    body: [
+      ["We only collect the details needed to deliver your order: name, phone, address and (optionally) email.", "Your details are shared only with our courier partner for delivery.", "We never sell your information to anyone.", "You can ask us to delete your data at any time on WhatsApp or email."],
+      ["ہم صرف وہی معلومات لیتے ہیں جو آرڈر پہنچانے کے لیے ضروری ہیں: نام، فون، پتہ اور (اختیاری) ای میل۔", "آپ کی معلومات صرف ڈیلیوری کے لیے کوریئر کمپنی کے ساتھ شیئر کی جاتی ہیں۔", "ہم آپ کی معلومات کبھی کسی کو فروخت نہیں کرتے۔", "آپ کسی بھی وقت واٹس ایپ یا ای میل پر اپنا ڈیٹا ختم کرنے کی درخواست کر سکتے ہیں۔"],
+    ],
+  },
+  terms: {
+    title: ["Terms of service", "شرائط و ضوابط"],
+    body: [
+      ["Prices are in Pakistani Rupees and include all taxes.", "Orders are confirmed only after a phone or WhatsApp confirmation.", "Results may vary from person to person. Do a patch test before first use.", "We may update these terms at any time; the latest version is always on this page."],
+      ["تمام قیمتیں پاکستانی روپے میں ہیں اور ٹیکس شامل ہے۔", "آرڈر فون یا واٹس ایپ پر تصدیق کے بعد ہی کنفرم ہوتا ہے۔", "نتائج ہر شخص میں مختلف ہو سکتے ہیں۔ پہلی بار استعمال سے پہلے تھوڑا سا لگا کر آزما لیں۔", "ہم کسی بھی وقت ان شرائط میں تبدیلی کر سکتے ہیں؛ تازہ ترین ورژن ہمیشہ اسی صفحے پر ہوگا۔"],
+    ],
+  },
+};
+
+/* =========================================================
+   Interface text  [English, Urdu]
+   ========================================================= */
+const T = {
+  /* Announcement + header */
+  "announce.ship": ["Free delivery anywhere in Pakistan. Pay cash when it arrives.", "پورے پاکستان میں مفت ڈیلیوری۔ پارسل ملنے پر ادائیگی کریں۔"],
+  "announce.wa": ["Official WhatsApp: 0300 1234567", "آفیشل واٹس ایپ: 0300 1234567"],
+  "nav.home": ["Home", "ہوم"],
+  "nav.oil": ["Hair oil", "ہیئر آئل"],
+  "nav.bundles": ["Bundle offers", "بنڈل آفرز"],
+  "nav.all": ["All products", "تمام پروڈکٹس"],
+  "nav.about": ["About us", "ہمارے بارے میں"],
+  "nav.contact": ["Contact", "رابطہ"],
+  "lang.toggle": ["اردو", "English"],
+  "search.ph": ["Search products…", "پروڈکٹس تلاش کریں…"],
+  "search.title": ["Search results", "تلاش کے نتائج"],
+  "search.for": ["Results for", "نتائج برائے"],
+  "search.none": ["No products found. Try another word.", "کوئی پروڈکٹ نہیں ملی۔ کوئی اور لفظ آزمائیں۔"],
+  "search.btn": ["Search", "تلاش"],
+  "proto.note": ["Design preview: prices, photos and reviews are placeholders", "ڈیزائن پریویو: قیمتیں، تصاویر اور ریویوز عارضی ہیں"],
+
+  /* Trust strip */
+  "trust.t1": ["20+ herbs", "20+ طاقتور جڑی بوٹیاں"], "trust.s1": ["Natural and organic", "قدرتی اور آرگینک"],
+  "trust.t2": ["Cash on Delivery", "کیش آن ڈیلیوری"], "trust.s2": ["Pay when it arrives", "آسان اور محفوظ"],
+  "trust.t3": ["Free delivery", "مفت ڈیلیوری"], "trust.s3": ["All over Pakistan", "پورے پاکستان میں"],
+  "trust.t4": ["10,000+ Happy Customers", "10,000+ خوش گاہک"], "trust.s4": ["4.9/5 Average Rating", "4.9/5 اوسط ریٹنگ"],
+  "trust.t5": ["Visible results", "واضح نتائج"], "trust.s5": ["In 4–6 weeks", "4–6 ہفتوں میں"],
+
+  /* Home sections */
+  "deals.kicker": ["Limited Time Offers", "محدود وقت کی آفرز"],
+  "deals.title": ["Bundle deals", "بنڈل آفرز"],
+  "best.kicker": ["Customer Favourites", "گاہکوں کی پسند"],
+  "best.title": ["Best sellers", "سب سے زیادہ بکنے والے"],
+  "viewall": ["View all", "سب دیکھیں"],
+  "deals.link": ["See all bundles", "تمام بنڈل دیکھیں"],
+  "best.link": ["See all products", "تمام پروڈکٹس دیکھیں"],
+  "deals.sub": ["Two or three bottles cost less per bottle.", "دو یا تین بوتلیں لینے پر فی بوتل قیمت کم۔"],
+  "best.sub": ["The packs people reorder most.", "وہ پیک جو لوگ بار بار منگواتے ہیں۔"],
+  "vid.sub": ["Short clips customers sent us. Tap one to play.", "گاہکوں کی بھیجی ہوئی ویڈیوز۔ چلانے کے لیے ٹیپ کریں۔"],
+  "search.count": ["{n} products for “{q}”", "“{q}” کے لیے {n} پروڈکٹس"],
+  "skip": ["Skip to content", "مواد پر جائیں"],
+  "banner.pause": ["Pause slideshow", "سلائیڈ شو روکیں"],
+  "banner.play": ["Play slideshow", "سلائیڈ شو چلائیں"],
+  "err.network": ["Couldn't reach the shop. Check your internet and try again.", "شاپ سے رابطہ نہیں ہو سکا۔ انٹرنیٹ چیک کر کے دوبارہ کوشش کریں۔"],
+  "err.srv.invalid_phone": ["Enter a valid mobile number (03XXXXXXXXX).", "درست موبائل نمبر درج کریں (03XXXXXXXXX)۔"],
+  "err.srv.invalid_name": ["Enter your full name.", "اپنا پورا نام درج کریں۔"],
+  "err.srv.invalid_city": ["Select your city.", "اپنا شہر منتخب کریں۔"],
+  "err.srv.invalid_address": ["Enter your complete address.", "اپنا مکمل پتہ درج کریں۔"],
+  "err.srv.invalid_email": ["Enter a valid email address, or leave it empty.", "درست ای میل درج کریں، یا خالی چھوڑ دیں۔"],
+  "err.srv.out_of_stock": ["One item in your cart is out of stock. Remove it and try again.", "کارٹ کی ایک پروڈکٹ ختم ہو گئی ہے۔ اسے ہٹا کر دوبارہ کوشش کریں۔"],
+  "err.srv.unknown_product": ["One item in your cart is no longer sold. Remove it and try again.", "کارٹ کی ایک پروڈکٹ اب دستیاب نہیں۔ اسے ہٹا کر دوبارہ کوشش کریں۔"],
+  "err.srv.invalid_qty": ["Each item can be ordered 1 to 20 times.", "ہر پروڈکٹ 1 سے 20 تک منگوائی جا سکتی ہے۔"],
+  "status.new": ["received, waiting for our call to confirm", "موصول، تصدیق کے لیے ہماری کال کا انتظار"],
+  "status.confirmed": ["confirmed, being packed", "کنفرم، پیکنگ جاری"],
+  "status.dispatched": ["dispatched with the courier", "کوریئر کے حوالے"],
+  "status.delivered": ["delivered", "ڈیلیور ہو گیا"],
+  "status.cancelled": ["cancelled", "منسوخ"],
+  "nav.login": ["Log in", "لاگ اِن"],
+  "ac.myaccount": ["My account", "میرا اکاؤنٹ"],
+  "ac.signin.title": ["Sign in", "سائن اِن"],
+  "ac.signin.sub": ["Sign in or create an account with your email. We'll send you a 6-digit code.", "اپنی ای میل سے سائن اِن کریں یا اکاؤنٹ بنائیں۔ ہم آپ کو 6 ہندسوں کا کوڈ بھیجیں گے۔"],
+  "ac.email": ["Email", "ای میل"],
+  "ac.continue": ["Continue", "آگے بڑھیں"],
+  "ac.noPassword": ["No password needed. New here? Your account is created automatically.", "پاس ورڈ کی ضرورت نہیں۔ نئے ہیں؟ آپ کا اکاؤنٹ خود بخود بن جائے گا۔"],
+  "ac.codeSent": ["We sent a 6-digit code to {e}. Check your inbox and spam folder.", "ہم نے {e} پر 6 ہندسوں کا کوڈ بھیجا ہے۔ ان باکس اور اسپام فولڈر چیک کریں۔"],
+  "ac.code": ["6-digit code", "6 ہندسوں کا کوڈ"],
+  "ac.verify": ["Sign in", "سائن اِن کریں"],
+  "ac.otherEmail": ["Use a different email", "دوسری ای میل استعمال کریں"],
+  "ac.resend": ["Send a new code", "نیا کوڈ بھیجیں"],
+  "ac.resendIn": ["Send a new code in {s}s", "{s} سیکنڈ میں نیا کوڈ بھیجیں"],
+  "ac.codeResent": ["New code sent", "نیا کوڈ بھیج دیا گیا"],
+  "ac.err.wait": ["Please wait a minute before asking for another code.", "نیا کوڈ مانگنے سے پہلے ایک منٹ انتظار کریں۔"],
+  "ac.err.send": ["Couldn't send the code. Check the email address and try again.", "کوڈ نہیں بھیجا جا سکا۔ ای میل چیک کر کے دوبارہ کوشش کریں۔"],
+  "ac.err.code": ["That code is wrong or has expired. Check the email or send a new code.", "کوڈ غلط ہے یا اس کی میعاد ختم ہو گئی۔ ای میل چیک کریں یا نیا کوڈ منگوائیں۔"],
+  "ac.err.codeFormat": ["Enter the 6-digit code from the email", "ای میل میں آیا ہوا 6 ہندسوں کا کوڈ درج کریں"],
+  "ac.welcome": ["You're signed in", "آپ سائن اِن ہو گئے"],
+  "ac.signout": ["Sign out", "سائن آؤٹ"],
+  "ac.signedOut": ["You're signed out", "آپ سائن آؤٹ ہو گئے"],
+  "ac.orders": ["Orders", "آرڈرز"],
+  "ac.profile": ["Saved address", "محفوظ پتہ"],
+  "ac.profileSub": ["Saved here, it fills in checkout for you next time.", "یہاں محفوظ کریں، اگلی بار چیک آؤٹ میں خود بھر جائے گا۔"],
+  "ac.save": ["Save", "محفوظ کریں"],
+  "ac.saved": ["Saved", "محفوظ ہو گیا"],
+  "ac.loading": ["Loading your orders…", "آپ کے آرڈرز لوڈ ہو رہے ہیں…"],
+  "ac.noOrders": ["You haven't placed an order yet.", "آپ نے ابھی تک کوئی آرڈر نہیں دیا۔"],
+  "ac.order": ["Order", "آرڈر"],
+  "ac.placedOn": ["Placed on {d}", "{d} کو دیا گیا"],
+  "ac.deliverTo": ["Delivery to", "ڈیلیوری کا پتہ"],
+  "ac.progress": ["Order progress", "آرڈر کی صورتحال"],
+  "step.new": ["Order placed", "آرڈر موصول"],
+  "step.confirmed": ["Confirmed", "کنفرم"],
+  "step.dispatched": ["On the way", "راستے میں"],
+  "step.delivered": ["Delivered", "ڈیلیور"],
+  "stepnote.new": ["We'll call or WhatsApp you within 24 hours to confirm.", "ہم 24 گھنٹوں میں کال یا واٹس ایپ کر کے تصدیق کریں گے۔"],
+  "stepnote.confirmed": ["Confirmed. We're packing your order.", "کنفرم۔ آپ کا آرڈر پیک ہو رہا ہے۔"],
+  "stepnote.dispatched": ["Handed to the courier. Please keep the cash ready.", "کوریئر کے حوالے کر دیا گیا۔ براہ کرم نقد رقم تیار رکھیں۔"],
+  "stepnote.delivered": ["Delivered. Thank you for your order!", "ڈیلیور ہو گیا۔ آرڈر کا شکریہ!"],
+  "stepnote.cancelled": ["This order was cancelled. Questions? Message us on WhatsApp.", "یہ آرڈر منسوخ ہو گیا۔ کوئی سوال؟ واٹس ایپ پر رابطہ کریں۔"],
+  "co.signedInAs": ["Signed in as", "سائن اِن:"],
+  "co.haveAccount": ["Have an account? Sign in to fill in your details and see this order later.", "اکاؤنٹ ہے؟ سائن اِن کریں تاکہ تفصیلات خود بھر جائیں اور آرڈر بعد میں دیکھ سکیں۔"],
+  "co.saveDetails": ["Save these details for next time", "یہ تفصیلات اگلی بار کے لیے محفوظ کریں"],
+  "ty.signedIn": ["You can follow this order any time in My account.", "آپ یہ آرڈر کسی بھی وقت میرا اکاؤنٹ میں دیکھ سکتے ہیں۔"],
+  "ty.viewOrders": ["View my orders", "میرے آرڈرز دیکھیں"],
+  "ty.guest": ["To follow this order, sign in with {e}. We'll email you a code, no password needed.", "اس آرڈر کی صورتحال دیکھنے کے لیے {e} سے سائن اِن کریں۔ ہم ای میل پر کوڈ بھیجیں گے، پاس ورڈ کی ضرورت نہیں۔"],
+  "ty.signInToFollow": ["Sign in to follow this order", "آرڈر دیکھنے کے لیے سائن اِن کریں"],
+  "co.cityLabel": ["City", "شہر"],
+  "home.h1": ["البابر Herbal Oil: desi herbal hair oil with Cash on Delivery in Pakistan", "البابر ہربل آئل: دیسی ہربل ہیئر آئل، پورے پاکستان میں کیش آن ڈیلیوری"],
+  "pd.soldout": ["Sold out for now. Message us on WhatsApp to hear when it's back.", "فی الحال ختم۔ دوبارہ دستیاب ہونے کی اطلاع کے لیے واٹس ایپ کریں۔"],
+  "err.srv.too_many_orders": ["Too many orders from this number in the last hour. Please message us on WhatsApp instead.", "اس نمبر سے پچھلے گھنٹے میں بہت زیادہ آرڈر آئے۔ براہ کرم واٹس ایپ پر رابطہ کریں۔"],
+  "err.srv.too_many_messages": ["You've sent several messages already. We'll reply soon, or message us on WhatsApp.", "آپ پہلے ہی کئی پیغام بھیج چکے ہیں۔ ہم جلد جواب دیں گے، یا واٹس ایپ پر رابطہ کریں۔"],
+  "nf.title": ["This page doesn't exist", "یہ صفحہ موجود نہیں"],
+  "nf.sub": ["The link may be old or mistyped. Go to the home page or see all products.", "لنک پرانا یا غلط ہو سکتا ہے۔ ہوم پیج پر جائیں یا تمام پروڈکٹس دیکھیں۔"],
+  "co.payLabel": ["Payment method", "ادائیگی کا طریقہ"],
+  "gallery.kicker": ["Real People • Real Love", "حقیقی لوگ • حقیقی محبت"],
+  "gallery.title": ["Photos from our customers", "ہمارے گاہکوں کی تصاویر"],
+  "gallery.sub": ["Sent to us on WhatsApp after their first bottle.", "پہلی بوتل کے بعد واٹس ایپ پر بھیجی گئیں۔"],
+  "ing.kicker": ["What's Inside", "اس میں کیا ہے"],
+  "ing.title": ["What's in the bottle", "بوتل میں کیا ہے"],
+  "ing.sub": ["Every bottle blends time-tested desi herbs with pure base oils — the same remedies our elders trusted for generations.", "ہر بوتل میں آزمودہ دیسی جڑی بوٹیاں اور خالص تیل — وہی نسخے جن پر ہمارے بزرگ نسلوں سے بھروسہ کرتے آئے ہیں۔"],
+  "ing.more": ["+ 10 more traditional herbs in every bottle", "+ ہر بوتل میں مزید 10 روایتی جڑی بوٹیاں"],
+  "use.kicker": ["How to use", "استعمال کا طریقہ"],
+  "use.title": ["How to use it", "استعمال کا طریقہ"],
+  "use.s1": ["Warm and apply", "ہلکا گرم کر کے لگائیں"],
+  "use.d1": ["Gently warm the oil and apply it to your scalp and hair roots.", "تیل کو ہلکا سا گرم کر کے سر کی جلد اور جڑوں پر لگائیں۔"],
+  "use.s2": ["Massage", "مالش کریں"],
+  "use.d2": ["Massage in slow circular motions for 5–10 minutes.", "5 سے 10 منٹ تک گول دائرے میں ہلکی مالش کریں۔"],
+  "use.s3": ["Leave on, then wash", "رکھیں اور دھو لیں"],
+  "use.d3": ["Leave for 2 hours or overnight, then wash with a mild shampoo. Use 2–3 times a week.", "2 گھنٹے یا رات بھر لگا رہنے دیں، پھر ہلکے شیمپو سے دھو لیں۔ ہفتے میں 2–3 بار استعمال کریں۔"],
+  "proc.kicker": ["Our Process", "ہمارا طریقہ"],
+  "proc.title": ["How we make it", "ہم اسے کیسے بناتے ہیں"],
+  "proc.sub": ["Four steps, done by hand, in small batches.", "چار مراحل، ہاتھ سے، چھوٹی مقدار میں۔"],
+  "proc.step": ["Step", "مرحلہ"],
+  "proc.cta": ["See the oil", "ہمارا تیل دیکھیں"],
+  "vid.kicker": ["Customer Stories", "گاہکوں کی کہانیاں"],
+  "vid.title": ["Customer videos", "گاہکوں کی ویڈیوز"],
+  "vid.soon": ["Customer videos will play here.", "یہاں گاہکوں کی ویڈیوز چلیں گی۔"],
+  "ba.kicker": ["Real Results", "حقیقی نتائج"],
+  "ba.title": ["Before and after", "پہلے اور بعد"],
+  "ba.sub": ["Drag the slider to compare before and after photos.", "پہلے اور بعد کی تصاویر کا موازنہ کرنے کے لیے سلائیڈر کھینچیں۔"],
+  "ba.before": ["Before", "پہلے"], "ba.after": ["After", "بعد"],
+  "ba.after_weeks": ["After {n} weeks", "{n} ہفتوں بعد"],
+  "stats.1": ["Happy Customers", "خوش گاہک"], "stats.2": ["Natural Herbs", "قدرتی جڑی بوٹیاں"],
+  "stats.3": ["Cities Delivered", "شہروں میں ڈیلیوری"], "stats.4": ["Average Rating", "اوسط ریٹنگ"],
+  "rev.kicker": ["Reviews", "ریویوز"],
+  "rev.title": ["What customers say", "گاہک کیا کہتے ہیں"],
+  "rev.based": ["Based on 1,200+ reviews", "1,200+ ریویوز کی بنیاد پر"],
+  "rev.verified": ["Verified buyer", "تصدیق شدہ خریدار"],
+  "faq.kicker": ["Questions", "سوالات"],
+  "faq.title": ["Questions people ask", "لوگ کیا پوچھتے ہیں"],
+  "cta.title": ["Ready to order?", "آرڈر کرنا چاہتے ہیں؟"],
+  "cta.sub": ["Free delivery and Cash on Delivery on every order. Not sure which pack? Ask us on WhatsApp.", "ہر آرڈر پر مفت ڈیلیوری اور کیش آن ڈیلیوری۔ پیک کا فیصلہ نہیں ہو رہا؟ واٹس ایپ پر پوچھیں۔"],
+  "cta.shop": ["Shop all packs", "تمام پیک دیکھیں"],
+  "wa.btn": ["Chat on WhatsApp", "واٹس ایپ پر بات کریں"],
+
+  /* Product cards */
+  "card.add": ["Add to cart", "کارٹ میں شامل کریں"],
+  "badge.sale": ["Sale", "سیل"],
+  "badge.save": ["Save", "بچت"],
+  "badge.best": ["Best seller", "بیسٹ سیلر"],
+  "badge.value": ["Best value", "بہترین قیمت"],
+  "badge.sold": ["Sold out", "ختم"],
+
+  /* Collection page */
+  "col.all": ["All products", "تمام پروڈکٹس"],
+  "col.bundles": ["Bundle offers", "بنڈل آفرز"],
+  "col.hair-oil": ["Hair oil", "ہیئر آئل"],
+  "col.bundles.sub": ["Save more when you buy more — every bundle ships free with Cash on Delivery.", "زیادہ خریدیں، زیادہ بچائیں — ہر بنڈل مفت ڈیلیوری اور کیش آن ڈیلیوری کے ساتھ۔"],
+  "col.all.sub": ["Pure herbal hair oil in every size — choose the pack that suits you.", "ہر سائز میں خالص ہربل ہیئر آئل — اپنی پسند کا پیک منتخب کریں۔"],
+  "col.filter": ["Filter:", "فلٹر:"],
+  "col.type": ["Product type", "پروڈکٹ کی قسم"],
+  "col.avail": ["Availability", "دستیابی"],
+  "col.instock": ["In stock", "اسٹاک میں"],
+  "col.price": ["Price", "قیمت"],
+  "col.from": ["From", "سے"], "col.to": ["To", "تک"],
+  "col.sort": ["Sort by:", "ترتیب:"],
+  "sort.featured": ["Featured", "نمایاں"],
+  "sort.best": ["Best selling", "سب سے زیادہ فروخت"],
+  "sort.az": ["Alphabetically, A–Z", "حروفِ تہجی، A–Z"],
+  "sort.low": ["Price, low to high", "قیمت، کم سے زیادہ"],
+  "sort.high": ["Price, high to low", "قیمت، زیادہ سے کم"],
+  "col.count": ["{n} products", "{n} پروڈکٹس"],
+  "col.clear": ["Clear all", "سب صاف کریں"],
+  "col.empty": ["No products match these filters.", "ان فلٹرز کے مطابق کوئی پروڈکٹ نہیں۔"],
+
+  /* Product page */
+  "pd.reviews": ["reviews", "ریویوز"],
+  "pd.off": ["OFF", "رعایت"],
+  "pd.shipnote": ["Free delivery, Cash on Delivery, tax included.", "مفت ڈیلیوری، کیش آن ڈیلیوری، ٹیکس شامل۔"],
+  "pd.chip1": ["Nourishes roots", "جڑوں کو غذائیت"], "pd.chip2": ["Reduces hair fall", "بالوں کا گرنا کم"],
+  "pd.chip3": ["Fights dandruff", "خشکی کا خاتمہ"], "pd.chip4": ["Adds natural shine", "قدرتی چمک"],
+  "pd.pack": ["Choose your pack", "اپنا پیک منتخب کریں"],
+  "pd.qty": ["Quantity", "تعداد"],
+  "pd.stock": ["In stock — ships within 24 hours", "اسٹاک میں موجود — 24 گھنٹوں میں روانگی"],
+  "pd.add": ["Add to cart", "کارٹ میں شامل کریں"],
+  "pd.cod": ["Buy now, pay on delivery", "ابھی خریدیں، ڈیلیوری پر ادائیگی"],
+  "pd.wa": ["Order on WhatsApp", "واٹس ایپ پر آرڈر کریں"],
+  "pd.est": ["estimated delivery", "متوقع ڈیلیوری"],
+  "pd.placed": ["Order placed", "آرڈر موصول"], "pd.dispatch": ["Dispatched", "روانہ"], "pd.delivered": ["Delivered", "ڈیلیور"],
+  "pd.share": ["Share", "شیئر کریں"],
+  "pd.copied": ["Link copied", "لنک کاپی ہو گیا"],
+  "pd.also": ["You may also like", "یہ بھی پسند آ سکتا ہے"],
+  "pd.acc.use": ["How to use", "استعمال کا طریقہ"],
+  "pd.acc.how": ["How it works", "یہ کیسے کام کرتا ہے"],
+  "pd.acc.ing": ["Ingredients", "اجزاء"],
+  "pd.acc.ben": ["Benefits", "فوائد"],
+  "pd.acc.ret": ["Refunds and returns", "ریفنڈ اور واپسی کی پالیسی"],
+  "pd.how.body": ["Warm oil opens the scalp pores so the herbs can reach the roots. Amla and Bhringraj strengthen the follicle, Kalonji and Methi reduce breakage, and Coconut & Almond oil lock in moisture.", "گرم تیل سر کی جلد کے مسام کھولتا ہے تاکہ جڑی بوٹیاں جڑوں تک پہنچ سکیں۔ آملہ اور بھرنگراج جڑوں کو مضبوط کرتے ہیں، کلونجی اور میتھی بالوں کا ٹوٹنا کم کرتے ہیں، جبکہ ناریل اور بادام کا تیل نمی برقرار رکھتے ہیں۔"],
+  "pd.ben.list": ["Reduces hair fall|Strengthens weak roots|Controls dandruff & itchy scalp|Helps prevent early greying|Adds softness & natural shine", "بالوں کا گرنا کم کرے|کمزور جڑوں کو مضبوط کرے|خشکی اور خارش پر قابو|وقت سے پہلے سفید بالوں سے بچاؤ|بالوں میں نرمی اور قدرتی چمک"],
+  "pd.wa.msg": ["Hi! I want to order: {p} × {q}", "السلام علیکم! میں آرڈر کرنا چاہتا/چاہتی ہوں: {p} × {q}"],
+  "pd.notfound": ["Product not found.", "پروڈکٹ نہیں ملی۔"],
+
+  /* Cart */
+  "cart.title": ["Your cart", "آپ کا کارٹ"],
+  "cart.empty": ["Your cart is empty", "آپ کا کارٹ خالی ہے"],
+  "cart.subtotal": ["Subtotal", "سب ٹوٹل"],
+  "cart.note": ["Free delivery. Pay cash when your parcel arrives.", "مفت ڈیلیوری۔ پارسل ملنے پر نقد ادائیگی۔"],
+  "cart.checkout": ["Check out", "چیک آؤٹ"],
+  "cart.view": ["View cart", "کارٹ دیکھیں"],
+  "cart.continue": ["Continue shopping", "خریداری جاری رکھیں"],
+  "cart.remove": ["Remove", "ہٹائیں"],
+  "cart.added": ["Item added to your cart", "پروڈکٹ کارٹ میں شامل ہو گئی"],
+  "cart.product": ["Product", "پروڈکٹ"],
+  "cart.qty": ["Quantity", "تعداد"],
+  "cart.total": ["Total", "کل"],
+  "cart.estimated": ["Estimated total", "متوقع کل رقم"],
+
+  /* Checkout */
+  "co.title": ["Checkout", "چیک آؤٹ"],
+  "co.contact": ["Contact", "رابطہ"],
+  "co.phone": ["Mobile number (e.g. 03001234567)", "موبائل نمبر (مثلاً 03001234567)"],
+  "co.email": ["Email", "ای میل"],
+  "co.delivery": ["Delivery", "ڈیلیوری"],
+  "co.country": ["Country / Region", "ملک"],
+  "co.pk": ["Pakistan", "پاکستان"],
+  "co.name": ["Full name", "پورا نام"],
+  "co.city": ["Select your city", "اپنا شہر منتخب کریں"],
+  "co.address": ["Complete address (house no., street, area)", "مکمل پتہ (مکان نمبر، گلی، علاقہ)"],
+  "co.landmark": ["Nearest landmark (optional)", "قریبی نشانی (اختیاری)"],
+  "co.notes": ["Order notes (optional)", "آرڈر نوٹس (اختیاری)"],
+  "co.ship": ["Shipping method", "شپنگ کا طریقہ"],
+  "co.std": ["Standard delivery (2–5 working days)", "عام ڈیلیوری (2–5 ورکنگ دن)"],
+  "co.free": ["FREE", "مفت"],
+  "co.pay": ["Payment", "ادائیگی"],
+  "co.secure": ["Every order is confirmed by phone before dispatch.", "روانگی سے پہلے ہر آرڈر کی فون پر تصدیق کی جاتی ہے۔"],
+  "co.cod": ["Cash on Delivery (COD)", "کیش آن ڈیلیوری (COD)"],
+  "co.codsub": ["Pay in cash when your parcel arrives.", "پارسل ملنے پر نقد ادائیگی کریں۔"],
+  "co.bank": ["Bank Transfer / JazzCash / Easypaisa", "بینک ٹرانسفر / جاز کیش / ایزی پیسہ"],
+  "co.banksub": ["Account details will be sent to you on WhatsApp.", "اکاؤنٹ کی تفصیلات آپ کو واٹس ایپ پر بھیجی جائیں گی۔"],
+  "co.place": ["Place order", "آرڈر مکمل کریں"],
+  "co.summary": ["Order summary", "آرڈر کا خلاصہ"],
+  "co.discount": ["Discount code", "ڈسکاؤنٹ کوڈ"],
+  "co.apply": ["Apply", "لاگو کریں"],
+  "co.hint": ["Tip: try code WELCOME10", "ٹِپ: کوڈ WELCOME10 آزمائیں"],
+  "co.badcode": ["This code is not valid.", "یہ کوڈ درست نہیں ہے۔"],
+  "co.goodcode": ["{n}% discount applied", "{n}% ڈسکاؤنٹ لاگو ہو گیا"],
+  "co.discountline": ["Discount", "ڈسکاؤنٹ"],
+  "co.shipping": ["Shipping", "شپنگ"],
+  "co.total": ["Total", "کل رقم"],
+  "co.empty": ["Your cart is empty — add a product first.", "آپ کا کارٹ خالی ہے — پہلے کوئی پروڈکٹ شامل کریں۔"],
+  "co.back": ["Return to cart", "کارٹ پر واپس جائیں"],
+  "err.phone": ["Enter a valid mobile number (03XXXXXXXXX)", "درست موبائل نمبر درج کریں (03XXXXXXXXX)"],
+  "err.email": ["Enter a valid email address", "درست ای میل درج کریں"],
+  "err.name": ["Enter your full name", "اپنا پورا نام درج کریں"],
+  "err.city": ["Select your city", "اپنا شہر منتخب کریں"],
+  "err.address": ["Enter your complete address", "اپنا مکمل پتہ درج کریں"],
+  "err.message": ["Please write your message", "براہ کرم اپنا پیغام لکھیں"],
+  "err.password": ["Password must be at least 6 characters", "پاس ورڈ کم از کم 6 حروف کا ہونا چاہیے"],
+
+  /* Thank you */
+  "ty.title": ["Thank you! Your order has been placed.", "شکریہ! آپ کا آرڈر موصول ہو گیا ہے۔"],
+  "ty.order": ["Order number", "آرڈر نمبر"],
+  "ty.sub": ["Our team will call or WhatsApp you within 24 hours to confirm your order. Please keep the cash ready at delivery.", "ہماری ٹیم 24 گھنٹوں میں آپ کو کال یا واٹس ایپ کر کے آرڈر کی تصدیق کرے گی۔ ڈیلیوری کے وقت نقد رقم تیار رکھیں۔"],
+  "ty.home": ["Continue shopping", "خریداری جاری رکھیں"],
+  "ty.none": ["No recent order found.", "کوئی حالیہ آرڈر نہیں ملا۔"],
+
+  /* Contact */
+  "ct.title": ["Contact us", "ہم سے رابطہ کریں"],
+  "ct.sub": ["Questions about your hair, an order or delivery? We reply within a few hours.", "بالوں، آرڈر یا ڈیلیوری کے بارے میں کوئی سوال؟ ہم چند گھنٹوں میں جواب دیتے ہیں۔"],
+  "ct.wa": ["WhatsApp", "واٹس ایپ"], "ct.email": ["Email", "ای میل"], "ct.hours": ["Working hours", "اوقاتِ کار"],
+  "ct.name": ["Name", "نام"], "ct.emailf": ["Email", "ای میل"], "ct.phone": ["Phone number (optional)", "فون نمبر (اختیاری)"],
+  "ct.msg": ["Comment", "پیغام"], "ct.send": ["Send", "بھیجیں"],
+  "ct.sent": ["Thanks for contacting us. We'll get back to you as soon as possible.", "رابطہ کرنے کا شکریہ۔ ہم جلد از جلد آپ سے رابطہ کریں گے۔"],
+
+  /* About */
+  "ab.kicker": ["Our Story", "ہماری کہانی"],
+  "ab.title": ["A family recipe, made for every home", "ایک خاندانی نسخہ، ہر گھر کے لیے"],
+  "ab.p1": ["البابر Herbal Oil started in our own kitchen — with a desi hair oil recipe passed down through generations. Friends and family kept asking for a bottle, so we decided to share it with all of Pakistan.", "البابر ہربل آئل کا آغاز ہمارے اپنے باورچی خانے سے ہوا — نسلوں سے چلے آ رہے ایک دیسی ہیئر آئل کے نسخے کے ساتھ۔ دوست اور رشتہ دار بار بار بوتل مانگتے تھے، اس لیے ہم نے اسے پورے پاکستان تک پہنچانے کا فیصلہ کیا۔"],
+  "ab.p2": ["Every batch is still made the slow way: hand-picked herbs, cooked for hours on a low flame, then filtered and bottled with care. No shortcuts, no harsh chemicals.", "ہر بیچ آج بھی اسی طرح بنتا ہے: ہاتھ سے چنی جڑی بوٹیاں، گھنٹوں دھیمی آنچ پر پکائی جاتی ہیں، پھر احتیاط سے چھان کر بوتل میں بھری جاتی ہیں۔ نہ کوئی شارٹ کٹ، نہ سخت کیمیکل۔"],
+  "ab.v1": ["100% Natural", "100% قدرتی"], "ab.v1d": ["Only herbs and pure oils.", "صرف جڑی بوٹیاں اور خالص تیل۔"],
+  "ab.v2": ["Small Batches", "چھوٹے بیچ"], "ab.v2d": ["Fresh oil in every bottle.", "ہر بوتل میں تازہ تیل۔"],
+  "ab.v3": ["Made in Pakistan", "پاکستان میں تیار"], "ab.v3d": ["Proudly local, for local hair.", "مقامی، مقامی بالوں کے لیے۔"],
+
+  /* Account */
+
+  /* Track */
+
+  /* Footer */
+  "foot.about": ["Pure herbal hair oil, made in small batches with a traditional desi recipe.", "روایتی دیسی نسخے سے چھوٹی مقدار میں تیار کردہ خالص ہربل ہیئر آئل۔"],
+  "foot.cod": ["Cash on Delivery all over Pakistan", "پورے پاکستان میں کیش آن ڈیلیوری"],
+  "foot.quick": ["Shop", "فوری لنکس"],
+  "foot.shop": ["Shop", "شاپ"],
+  "foot.help": ["Help", "کسٹمر کیئر"],
+  "foot.track": ["Track your order", "اپنا آرڈر ٹریک کریں"],
+  "foot.contact": ["Contact", "رابطہ"],
+  "foot.hours": ["Mon – Sat, 10am – 7pm", "پیر تا ہفتہ، صبح 10 سے شام 7 بجے"],
+  "foot.rights": ["All rights reserved.", "جملہ حقوق محفوظ ہیں۔"],
+  "foot.news": ["Subscribe for offers", "آفرز کے لیے سبسکرائب کریں"],
+  "foot.newsph": ["Your email", "آپ کی ای میل"],
+  "foot.join": ["Join", "شامل ہوں"],
+  "foot.pay": ["Cash on Delivery, JazzCash, Easypaisa, bank transfer", "کیش آن ڈیلیوری، جاز کیش، ایزی پیسہ، بینک ٹرانسفر"],
+  "foot.subscribed":["Thanks for subscribing!", "سبسکرائب کرنے کا شکریہ!"],
+};

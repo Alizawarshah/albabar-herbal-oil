@@ -1,0 +1,8 @@
+# Private: reference screenshots of other shops (not ours to publish)
+Reference for Website/
+# Local preview settings
+.claude/
+# System files
+Thumbs.db
+desktop.ini
+.DS_Store
