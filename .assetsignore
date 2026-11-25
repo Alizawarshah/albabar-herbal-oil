@@ -1,0 +1,8 @@
+# Files that are part of the project but must not be published on the website
+.git
+.gitignore
+.assetsignore
+wrangler.jsonc
+README.md
+design-system
+Images/.gitkeep

@@ -1,0 +1,12 @@
+// Cloudflare Workers settings for the البابر Herbal Oil static website (no server code).
+{
+  "name": "albabar-herbal-oil",
+  "compatibility_date": "2026-11-25",
+  "assets": {
+    "directory": "./",
+    // unknown addresses show our designed 404.html page
+    "not_found_handling": "404-page",
+    // /shop.html is served at /shop (Cloudflare's default)
+    "html_handling": "auto-trailing-slash"
+  }
+}
